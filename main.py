@@ -31,7 +31,7 @@ credentials = {
 }
 
 # get the list of pdf files
-file_directory = "./file_directory"
+file_directory = os.path.join(Path.cwd(),"file_directory")
 pdf_files = [file for file in os.listdir(file_directory) if file.endswith(".pdf")]
 
 authenticator = stauth.Authenticate(credentials, "sample_app", "abcd", cookie_expiry_days=30)
@@ -48,7 +48,7 @@ if authentication_status == None:
     
 if authentication_status:
     # logout button
-    authenticator.logout("Logout", "main")
+    authenticator.logout("Logout", "sidebar")
     
     # file selection dropdown menu
     selected_file = st.sidebar.selectbox("Select a PDF", pdf_files)
