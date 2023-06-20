@@ -38,8 +38,9 @@ def member_page():
     selected_file = st.selectbox("Select a PDF", pdf_files)
 
     ### OpenAI API Key
-    load_dotenv()
-    api = os.getenv("openai_api_key")
+    # load_dotenv()
+    # api = os.getenv("openai_api_key")
+    api = st.secrets["openai_api_key"]
     os.environ["OPENAI_API_KEY"] = api
 
     # input question
