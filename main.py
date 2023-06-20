@@ -1,19 +1,13 @@
 import streamlit as st
-from pdfminer import high_level
 from pathlib import Path
 import pickle
 import streamlit_authenticator as stauth
 import os
-
-# extract text from pdf
-def extract_text(pdf_path):
-    extracted_text = text = high_level.extract_text(pdf_path, "")
-    return extracted_text
-
-# get a response
-def get_answer(query, pdf_text):
-    answer = f'query:\n{query}\n\nextracted text:\n{pdf_text}'
-    return answer
+from streamlit_option_menu import option_menu
+from admin import admin_page
+from doctor import doctor_page
+from member import member_page
+from PIL import Image
 
 # get user information
 user_info = {}
@@ -34,34 +28,51 @@ credentials = {
 file_directory = os.path.join(Path.cwd(),"file_directory")
 pdf_files = [f'sample{i}.pdf' for i in range(1, len(os.listdir(file_directory))+1)]
 
-authenticator = stauth.Authenticate(credentials, "sample_app", "abcd", cookie_expiry_days=30)
+cookie_name = "sample_app"
+authenticator = stauth.Authenticate(credentials, cookie_name, "abcd", cookie_expiry_days=30)
 
 name, authentication_status, username = authenticator.login("Login", "sidebar")
 
+def logout():
+    authenticator.cookie_manager.delete(cookie_name)
+    st.session_state['logout'] = True
+    st.session_state['name'] = None
+    st.session_state['username'] = None
+    st.session_state['authentication_status'] = None
+
 if authentication_status == False:
     st.error("Username/password is incorrect")
-
-# the app
-st.title("PDF QnA")
-if authentication_status == None:
+elif authentication_status == None:
     st.warning("Please enter your username and password")
     
 if authentication_status:
-    # logout button
-    authenticator.logout("Logout", "sidebar")
+    logo_img = Image.open('images/resoluteai_logo.webp')
+    st.sidebar.image(logo_img)
     
-    # file selection dropdown menu
-    selected_file = st.sidebar.selectbox("Select a PDF", pdf_files)
-
-    # input question
-    question = st.text_input("Ask a Question")
-
-    # output
-    if st.button("Ask"):
-        if selected_file:
-            file_path = os.path.join(file_directory, selected_file)
-            pdf_text = extract_text(file_path)
-            answer = get_answer(question, pdf_text)
-            st.write(answer)
-        else:
-            st.warning("Please select a PDF.")
+    st.markdown(
+        """
+        <style>
+            .css-1544g2n {
+                padding: 0.5rem 0.5rem 0.5rem;
+            }
+        </style>
+        """,
+            unsafe_allow_html=True,
+        )
+    
+    with st.sidebar:
+        selected_page = option_menu(
+            menu_title=None,
+            options = ["Admin", "Doctor", "Member", "Logout"],
+            icons = ["gear", "clipboard-pulse", "person", "box-arrow-left"]
+        )
+    
+    if selected_page == "Admin":
+        admin_page()
+    if selected_page == "Doctor":
+        doctor_page()
+    if selected_page == "Member":
+        member_page()
+    if selected_page == "Logout":
+        logout()
+    #=======================================
