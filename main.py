@@ -32,7 +32,7 @@ credentials = {
 
 # get the list of pdf files
 file_directory = os.path.join(Path.cwd(),"file_directory")
-pdf_files = [file for file in os.listdir(file_directory) if file.endswith(".pdf")]
+pdf_files = [f'sample{i}.pdf' for i in range(1, len(os.listdir(file_directory))+1)]
 
 authenticator = stauth.Authenticate(credentials, "sample_app", "abcd", cookie_expiry_days=30)
 
