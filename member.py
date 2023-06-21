@@ -46,22 +46,30 @@ def member_page():
     api = st.secrets["openai_api_key"]
     os.environ["OPENAI_API_KEY"] = api
 
+    question=""
     # input question
-    #question = st.text_input("Ask a Question")
+    question = st.text_input("Ask a Question")
     
-    question=" "
-    st.write("Click the 'Start' button and speak into your microphone.")
-    if st.button("Start"):
-        question= speechTotext()  #edited by sudip
+    col1, col2 = st.columns([1,1])
+    with col1:
+        ask_button = st.button("Ask", use_container_width=1)
+    with col2:
+        speak_button = st.button("Speak", use_container_width=1)
+    
+    # st.write("Click the 'Start' button and speak into your microphone.")
+    if speak_button:
+        question_speech = speechTotext()  #edited by sudip
+        question = question_speech
+
+
 
     # output
-    if st.button("Ask"):
+    if question!="":
         if selected_file:
             file_path = os.path.join(file_directory, selected_file)
             pdf_text = extract_text(file_path)
 
             ### GenerativeAI
-
             splitter = CharacterTextSplitter(
             separator = ".",
             chunk_size = 200,
