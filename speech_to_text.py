@@ -1,27 +1,22 @@
 import streamlit as st
 import speech_recognition as sr
 
-def speechTotext():
+def speech_to_text():
     text=" "
-    st.title("Speech to Text Converter")
+    r = sr.Recognizer()
 
-    st.write("Click the 'Start' button and speak into your microphone.")
+    with sr.Microphone() as source:
+        st.write("Speak something...")
+        audio = r.listen(source)
 
-    if st.button("Start"):
-        r = sr.Recognizer()
-        with sr.Microphone() as source:
-            st.write("Speak something...")
-            audio = r.listen(source)
-
-        try:
-            text = r.recognize_google(audio)
-            st.write("You said:", text)
-        except sr.UnknownValueError:
-            st.write("Sorry, I could not understand your speech.")
-        except sr.RequestError as e:
-            st.write("Error occurred during speech recognition:", e)
-
+    try:
+        text = r.recognize_google(audio)
+        st.write("You said:", text)
+    except sr.UnknownValueError:
+        st.write("Sorry, I could not understand your speech.")
+    except sr.RequestError as e:
+        st.write("Error occurred during speech recognition:", e)
     return text
 
 
-text=speech_to_text()
+
