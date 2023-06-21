@@ -9,6 +9,7 @@ from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
 from langchain.vectorstores import FAISS 
+from speech_to_text import * #edited by Sudip
 
 
 # extract text from pdf
@@ -46,7 +47,8 @@ def member_page():
     os.environ["OPENAI_API_KEY"] = api
 
     # input question
-    question = st.text_input("Ask a Question")
+    #question = st.text_input("Ask a Question")
+    question=speechTotext() #edited by sudip
 
     # output
     if st.button("Ask"):
