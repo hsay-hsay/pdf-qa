@@ -16,7 +16,7 @@ def speech_to_text():
         st.write("Error occurred during speech recognition:", e)
 
 def Start():
-    st.title("Speech to Text Converter")
+    #st.title("Speech to Text Converter")
 
     st.write("Click the 'Start' button and speak into your microphone.")
 
