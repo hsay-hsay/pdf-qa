@@ -30,7 +30,8 @@ def get_answer(query, pdf_text):
 
 # get the list of pdf files
 file_directory = os.path.join(Path.cwd(),"file_directory")
-pdf_files = [f'sample{i}.pdf' for i in range(1, len(os.listdir(file_directory))+1)]
+# pdf_files = [f'sample{i}.pdf' for i in range(1, len(os.listdir(file_directory))+1)]
+pdf_files = sorted([file for file in os.listdir(file_directory)])
 
 def member_page():
     st.title("AI Assisted Medical Records Digitization")
