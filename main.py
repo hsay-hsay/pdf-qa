@@ -31,7 +31,7 @@ pdf_files = [f'sample{i}.pdf' for i in range(1, len(os.listdir(file_directory))+
 cookie_name = "sample_app"
 authenticator = stauth.Authenticate(credentials, cookie_name, "abcd", cookie_expiry_days=30)
 
-name, authentication_status, username = authenticator.login("Login", "sidebar")
+name, authentication_status, username = authenticator.login("Login", "main")
 
 def logout():
     authenticator.cookie_manager.delete(cookie_name)
@@ -54,6 +54,18 @@ if authentication_status:
         <style>
             .css-1544g2n {
                 padding: 0.5rem 0.5rem 0.5rem;
+            }
+        </style>
+        """,
+            unsafe_allow_html=True,
+        )
+    
+    st.markdown(
+        """
+        <style>
+            .css-1y4p8pa {
+                padding-top: 0rem;
+                max-width: 50rem;
             }
         </style>
         """,

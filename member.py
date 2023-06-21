@@ -32,10 +32,12 @@ file_directory = os.path.join(Path.cwd(),"file_directory")
 pdf_files = [f'sample{i}.pdf' for i in range(1, len(os.listdir(file_directory))+1)]
 
 def member_page():
-    st.title("PDF - QnA")
+    st.title("AI Assisted Medical Records Digitization")
     
     # file selection dropdown menu
-    selected_file = st.selectbox("Select a PDF", pdf_files)
+    # st.write("check out this [link](https://share.streamlit.io/mesmith027/streamlit_webapps/main/MC_pi/streamlit_app.py)")
+    selected_file = st.selectbox("Select a PDF [[All Reports](https://drive.google.com/drive/folders/1BocjhYw5_XB6113__FNtL4eTt1mSpE3z)]",
+                                 pdf_files)
 
     ### OpenAI API Key
     # load_dotenv()
