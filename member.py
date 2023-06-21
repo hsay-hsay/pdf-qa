@@ -48,10 +48,11 @@ def member_page():
 
     # input question
     #question = st.text_input("Ask a Question")
+    
+    question=" "
     st.write("Click the 'Start' button and speak into your microphone.")
-
     if st.button("Start"):
-        question=speechTotext()  #edited by sudip
+        question= speechTotext()  #edited by sudip
 
     # output
     if st.button("Ask"):
