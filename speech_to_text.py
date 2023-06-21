@@ -1,7 +1,7 @@
 import streamlit as st
 import speech_recognition as sr
 
-def speech_to_text():
+def speechTotext():
     text=" "
     r = sr.Recognizer()
 
