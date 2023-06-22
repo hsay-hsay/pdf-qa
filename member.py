@@ -13,6 +13,7 @@ from speech_to_text import * #edited by Sudip
 
 
 # extract text from pdf
+@st.cache_data()
 def extract_text(pdf_path):
     # extracted_text = text = high_level.extract_text(pdf_path, "")
     doc_reader = PdfReader(pdf_path)
@@ -32,6 +33,14 @@ def get_answer(query, pdf_text):
 file_directory = os.path.join(Path.cwd(),"file_directory")
 # pdf_files = [f'sample{i}.pdf' for i in range(1, len(os.listdir(file_directory))+1)]
 pdf_files = sorted([file for file in os.listdir(file_directory)])
+
+@st.cache_resource()
+def get_embeddings():
+    return HuggingFaceEmbeddings()
+
+@st.cache_resource()
+def get_qa_chain():
+    return load_qa_chain(OpenAI(), chain_type="stuff")
 
 def member_page():
     st.title("AI Assisted Medical Records Digitization")
@@ -79,13 +88,11 @@ def member_page():
             )
             chunk_lst = splitter.split_text(pdf_text)
 
-            embeddings = HuggingFaceEmbeddings()
+            embeddings = get_embeddings() 
             doc_search = FAISS.from_texts(chunk_lst, embeddings)
 
-            chain = load_qa_chain(OpenAI(), 
-                            chain_type="stuff") 
+            chain = get_qa_chain()
             
-
             query = question
             docs = doc_search.similarity_search(query)
             op = chain.run(input_documents=docs, question=query)
