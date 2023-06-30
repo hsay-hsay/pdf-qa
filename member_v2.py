@@ -60,6 +60,18 @@ def get_embeddings():
 def get_qa_chain():
     return load_qa_chain(OpenAI(), chain_type="stuff")
 
+@st.cache_resource()
+def get_chunk_lst(pdf_text):
+    splitter = CharacterTextSplitter(
+                separator = ".",
+                chunk_size = 200,
+                chunk_overlap = 100,
+                length_function = len
+            )
+    chunk_lst = splitter.split_text(pdf_text)
+    return chunk_lst
+    
+
 def member_page():
     st.title("AI Assisted Medical Records Digitization")
     
@@ -100,15 +112,11 @@ def member_page():
             # pdf_text = extract_text(file_path)
             pdf_text = extract_text_multiple(pdfs_folder)
             ### GenerativeAI
-            splitter = CharacterTextSplitter(
-                separator = ".",
-                chunk_size = 200,
-                chunk_overlap = 100,
-                length_function = len
-            )
-            chunk_lst = splitter.split_text(pdf_text)
+            
+            chunk_lst = get_chunk_lst(pdf_text)
 
             embeddings = get_embeddings() 
+            
             doc_search = FAISS.from_texts(chunk_lst, embeddings)
 
             chain = get_qa_chain()
