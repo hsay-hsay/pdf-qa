@@ -96,19 +96,10 @@ def member_page():
         speak_button = st.button("Speak", use_container_width=1)
     # st.write("Click the 'Start' button and speak into your microphone.")
     if speak_button:
-        text=" "
-        r = sr.Recognizer()
-        with sr.Microphone() as source:
-            st.write("Speak something...")
-            audio = r.listen(source)
-        try:
-            text = r.recognize_google(audio)
-            st.write("You said:", text)
-        except sr.UnknownValueError:
-            st.write("Sorry, I could not understand your speech.")
-        except sr.RequestError as e:
-            st.write("Error occurred during speech recognition:", e)
-        question = text
+        question_speech = speechtotext()  #edited by sudip
+        question = question_speech
+
+
 
     # output
     if question!="":

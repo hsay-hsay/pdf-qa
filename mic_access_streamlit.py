@@ -35,6 +35,7 @@ def speechtotext():
 
     if result:
         if "GET_TEXT" in result:
+            print(result)
             st.write(result.get("GET_TEXT"))
 
     
