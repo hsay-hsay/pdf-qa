@@ -8,11 +8,11 @@ import openai
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
-from langchain.vectorstores import FAISS 
-#from speech_to_text import * #edited by Sudip
-from mic_access_streamlit import *
+from langchain.vectorstores import FAISS
+from speech_to_text import * #edited by Sudip
+import speech_recognition as sr
+#from mic_access_streamlit import *
 import tempfile
-
 
 # extract text from pdf
 @st.cache_data()
@@ -35,7 +35,7 @@ def extract_text_multiple(pdfs_folder):
         with tempfile.NamedTemporaryFile(delete=False) as temp_file:
             temp_path = temp_file.name
             temp_file.write(pdf_file.read())
-            
+           
         doc_reader = PdfReader(temp_path)
         for page in doc_reader.pages:
             raw_text += page.extract_text()
@@ -62,6 +62,7 @@ def get_qa_chain():
     return load_qa_chain(OpenAI(), chain_type="stuff")
 
 @st.cache_resource()
+
 def get_chunk_lst(pdf_text):
     splitter = CharacterTextSplitter(
                 separator = ".",
@@ -71,18 +72,14 @@ def get_chunk_lst(pdf_text):
             )
     chunk_lst = splitter.split_text(pdf_text)
     return chunk_lst
-    
 
 def member_page():
     st.title("AI Assisted Medical Records Digitization")
-    
     # file selection dropdown menu
     # st.write("check out this [link](https://share.streamlit.io/mesmith027/streamlit_webapps/main/MC_pi/streamlit_app.py)")
     # selected_file = st.selectbox("Select a PDF [[All Reports](https://drive.google.com/drive/folders/1BocjhYw5_XB6113__FNtL4eTt1mSpE3z)]",
     #                              pdf_files)
-
     pdfs_folder = st.file_uploader("Upload PDF files", type="pdf", accept_multiple_files=True)
-
     ### OpenAI API Key
     # load_dotenv()
     # api = os.getenv("openai_api_key")
@@ -92,19 +89,26 @@ def member_page():
     question=""
     # input question
     question = st.text_input("Ask a Question")
-    
     col1, col2 = st.columns([1,1])
     with col1:
         ask_button = st.button("Ask", use_container_width=1)
     with col2:
         speak_button = st.button("Speak", use_container_width=1)
-    
     # st.write("Click the 'Start' button and speak into your microphone.")
     if speak_button:
-        question_speech = speechtotext()  #edited by sudip
-        question = question_speech
-
-
+        text=" "
+        r = sr.Recognizer()
+        with sr.Microphone() as source:
+            st.write("Speak something...")
+            audio = r.listen(source)
+        try:
+            text = r.recognize_google(audio)
+            st.write("You said:", text)
+        except sr.UnknownValueError:
+            st.write("Sorry, I could not understand your speech.")
+        except sr.RequestError as e:
+            st.write("Error occurred during speech recognition:", e)
+        question = text
 
     # output
     if question!="":
@@ -113,19 +117,13 @@ def member_page():
             # pdf_text = extract_text(file_path)
             pdf_text = extract_text_multiple(pdfs_folder)
             ### GenerativeAI
-            
             chunk_lst = get_chunk_lst(pdf_text)
-
-            embeddings = get_embeddings() 
-            
+            embeddings = get_embeddings()
             doc_search = FAISS.from_texts(chunk_lst, embeddings)
-
             chain = get_qa_chain()
-            
             query = question
             docs = doc_search.similarity_search(query)
             op = chain.run(input_documents=docs, question=query)
-            
             st.write(op)
         else:
             st.warning("Please select a PDF.")
