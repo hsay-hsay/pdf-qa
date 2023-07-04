@@ -37,12 +37,10 @@ def speechtotext():
         if "GET_TEXT" in result:
             st.write(result.get("GET_TEXT"))
 
-    if type(result)=="<class 'dict'>":
-        return result
+    
+    return result
 
 
     
 
 
-text=speechtotext()
-print(text)
