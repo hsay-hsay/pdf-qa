@@ -102,7 +102,8 @@ def member_page():
     # st.write("Click the 'Start' button and speak into your microphone.")
     if speak_button:
         question_speech = speechtotext()  #edited by sudip
-        question = question_speech
+        if question_speech is not None:
+            question = question_speech
 
 
 
