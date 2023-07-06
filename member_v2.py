@@ -1,6 +1,6 @@
 import streamlit as st
 from pathlib import Path
-import os
+import os, random
 from PyPDF2 import PdfReader
 from dotenv import load_dotenv
 from langchain.text_splitter import CharacterTextSplitter
@@ -13,6 +13,12 @@ from speech_to_text import * #edited by Sudip
 import speech_recognition as sr
 #from mic_access_streamlit import *
 import tempfile
+from st_custom_components import st_audiorec
+from audio_recorder_streamlit import audio_recorder
+from pydub import AudioSegment as am
+
+r = sr.Recognizer()
+
 
 # extract text from pdf
 @st.cache_data()
@@ -25,6 +31,7 @@ def extract_text(pdf_path):
     # raw_text = raw_text.replace(' ', '')
     # raw_text = raw_text.replace('\n', ' ')
     return raw_text
+
 
 # extract text from multiple pdf files
 @st.cache_data()
@@ -48,21 +55,24 @@ def get_answer(query, pdf_text):
     answer = f'query:\n{query}\n\nextracted text:\n{pdf_text}'
     return answer
 
+
 # get the list of pdf files
 file_directory = os.path.join(Path.cwd(),"file_directory")
 # pdf_files = [f'sample{i}.pdf' for i in range(1, len(os.listdir(file_directory))+1)]
 pdf_files = sorted([file for file in os.listdir(file_directory)])
 
+
 @st.cache_resource()
 def get_embeddings():
     return HuggingFaceEmbeddings()
+
 
 @st.cache_resource()
 def get_qa_chain():
     return load_qa_chain(OpenAI(), chain_type="stuff")
 
-@st.cache_resource()
 
+@st.cache_resource()
 def get_chunk_lst(pdf_text):
     splitter = CharacterTextSplitter(
                 separator = ".",
@@ -93,21 +103,37 @@ def member_page():
     with col1:
         ask_button = st.button("Ask", use_container_width=1)
     with col2:
-        speak_button = st.button("Speak", use_container_width=1)
+        # speak_button = st.button("Speak", use_container_width=1)
+        audio_bytes = audio_recorder()
     # st.write("Click the 'Start' button and speak into your microphone.")
-    if speak_button:
-        text=" "
-        r = sr.Recognizer()
-        with sr.Microphone() as source:
-            st.write("Speak something...")
-            audio = r.listen(source)
-        try:
+    if audio_bytes:
+        # text=" "
+        # r = sr.Recognizer()
+        # with sr.Microphone() as source:
+        #     st.write("Speak something...")
+        #     audio = r.listen(source)
+        # try:
+        #     text = r.recognize_google(audio)
+        #     st.write("You said:", text)
+        # except sr.UnknownValueError:
+        #     st.write("Sorry, I could not understand your speech.")
+        # except sr.RequestError as e:
+        #     st.write("Error occurred during speech recognition:", e)
+        # question = text
+        filename = str(random.randint(1,199))+".wav"
+        
+        with open(filename, mode='bx') as f:
+            f.write(audio_bytes)
+            sound = am.from_file(filename, format='wav', frame_rate=44100)
+            sound = sound.set_frame_rate(16000)
+            sound.export(filename, format='wav')
+            harvard = sr.AudioFile(filename)
+            with harvard as source:
+                audio = r.record(source)
             text = r.recognize_google(audio)
             st.write("You said:", text)
-        except sr.UnknownValueError:
-            st.write("Sorry, I could not understand your speech.")
-        except sr.RequestError as e:
-            st.write("Error occurred during speech recognition:", e)
+        os.remove(filename)
+        # question_speech = speechTotext()  #edited by sudip
         question = text
 
     # output
