@@ -99,7 +99,7 @@ def member_page():
     question=""
     # input question
     ask_text = st.text_input("Ask a Question")
-    col1, col2 = st.columns([1,1])
+    col1, col3,  col2 = st.columns([2, 3, 2])
     with col1:
         ask_button = st.button("Ask", use_container_width=1)
     with col2:
@@ -107,20 +107,21 @@ def member_page():
         # audio_bytes = audio_recorder(text="", icon_size="2x") -> small button
         audio_bytes = audio_recorder(text = "Click to record", icon_size="2x", key="audio_button")
         
-    # st.markdown(
-    #     """
-    #     <style>
-    #         .body {
-    #             text-align: center;
-    #         }
-    #     </style>
-    #     """,
-    #         unsafe_allow_html=True,
-    # )
+    st.markdown(
+        """
+        <style>
+            .body {
+                <button type="button" class="btn btn-primary">Primary</button>
+            }
+        </style>
+        """,
+            unsafe_allow_html=True,
+    )
     
     # st.write("Click the 'Start' button and speak into your microphone.")
     if audio_bytes:
         # question = text
+        # audio_bytes = audio_recorder(text = "Click to record", icon_size="2x", key="audio_button")
         filename = str(random.randint(1,199))+".wav"
         with open(filename, mode='bx') as f:
             f.write(audio_bytes)
