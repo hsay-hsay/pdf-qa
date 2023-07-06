@@ -161,4 +161,5 @@ def member_page():
             st.warning("Please select a PDF.")
         audio_bytes = False
         ask_button = False
+        question=""
         
