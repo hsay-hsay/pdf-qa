@@ -91,14 +91,14 @@ def member_page():
     #                              pdf_files)
     pdfs_folder = st.file_uploader("Upload PDF files", type="pdf", accept_multiple_files=True)
     ### OpenAI API Key
-    # load_dotenv()
-    # api = os.getenv("openai_api_key")
-    api = st.secrets["openai_api_key"]
+    load_dotenv()
+    api = os.getenv("openai_api_key")
+    # api = st.secrets["openai_api_key"]
     os.environ["OPENAI_API_KEY"] = api
 
     question=""
     # input question
-    text = st.text_input("Ask a Question")
+    ask_text = st.text_input("Ask a Question")
     col1, col2 = st.columns([1,1])
     with col1:
         ask_button = st.button("Ask", use_container_width=1)
@@ -110,7 +110,7 @@ def member_page():
     # st.markdown(
     #     """
     #     <style>
-    #         .div#root.body {
+    #         .body {
     #             text-align: center;
     #         }
     #     </style>
@@ -131,18 +131,18 @@ def member_page():
             with harvard as source:
                 audio = r.record(source)
             text = r.recognize_google(audio)
-            st.write("You said:", text)
-            st.write("please wait...")
         
         os.remove(filename)
         # question_speech = speechTotext()  #edited by sudip
         question = text
         
     if ask_button:
-        question = text
+        question = ask_text
     
     # output
     if question!="":
+        st.write("You Asked:", question)
+        st.write("please wait...")
         if pdfs_folder:
             # file_path = os.path.join(file_directory, selected_file)
             # pdf_text = extract_text(file_path)
