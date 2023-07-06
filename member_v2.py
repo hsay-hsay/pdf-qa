@@ -98,30 +98,30 @@ def member_page():
 
     question=""
     # input question
-    question = st.text_input("Ask a Question")
+    text = st.text_input("Ask a Question")
     col1, col2 = st.columns([1,1])
     with col1:
         ask_button = st.button("Ask", use_container_width=1)
     with col2:
         # speak_button = st.button("Speak", use_container_width=1)
-        audio_bytes = audio_recorder()
+        # audio_bytes = audio_recorder(text="", icon_size="2x") -> small button
+        audio_bytes = audio_recorder(text = "Click to record", icon_size="2x", key="audio_button")
+        
+    # st.markdown(
+    #     """
+    #     <style>
+    #         .div#root.body {
+    #             text-align: center;
+    #         }
+    #     </style>
+    #     """,
+    #         unsafe_allow_html=True,
+    # )
+    
     # st.write("Click the 'Start' button and speak into your microphone.")
     if audio_bytes:
-        # text=" "
-        # r = sr.Recognizer()
-        # with sr.Microphone() as source:
-        #     st.write("Speak something...")
-        #     audio = r.listen(source)
-        # try:
-        #     text = r.recognize_google(audio)
-        #     st.write("You said:", text)
-        # except sr.UnknownValueError:
-        #     st.write("Sorry, I could not understand your speech.")
-        # except sr.RequestError as e:
-        #     st.write("Error occurred during speech recognition:", e)
         # question = text
         filename = str(random.randint(1,199))+".wav"
-        
         with open(filename, mode='bx') as f:
             f.write(audio_bytes)
             sound = am.from_file(filename, format='wav', frame_rate=44100)
@@ -132,10 +132,15 @@ def member_page():
                 audio = r.record(source)
             text = r.recognize_google(audio)
             st.write("You said:", text)
+            st.write("please wait...")
+        
         os.remove(filename)
         # question_speech = speechTotext()  #edited by sudip
         question = text
-
+        
+    if ask_button:
+        question = text
+    
     # output
     if question!="":
         if pdfs_folder:
@@ -153,3 +158,6 @@ def member_page():
             st.write(op)
         else:
             st.warning("Please select a PDF.")
+        audio_bytes = False
+        ask_button = False
+        
