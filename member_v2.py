@@ -159,7 +159,7 @@ def member_page():
                 op = chain.run(input_documents=docs, question=query)
                 st.write(op)
             except:
-                st.write("Apologies! The information you have requested in not available at this point")
+                st.write("Apologies! The information you have requested is not available at this point")
         else:
             st.warning("Please select a PDF.")
         audio_bytes = False
