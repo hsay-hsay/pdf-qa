@@ -165,7 +165,7 @@ def member_page():
                     st.write("Apologies! The information you have requested is not available at this point")
                 else:
                     st.write(op)
-            except Exception:
+            except:
                 st.write("Apologies! The information you have requested is not available at this point")
         else:
             st.warning("Please select a PDF.")
