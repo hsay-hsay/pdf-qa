@@ -149,15 +149,15 @@ def member_page():
             # pdf_text = extract_text(file_path)
             pdf_text = extract_text_multiple(pdfs_folder)
             ### GenerativeAI
-             with st.spinner('Please wait...'):
+             
     # Perform your time-consuming task or computation here
     
-                chunk_lst = get_chunk_lst(pdf_text)
-                embeddings = get_embeddings()
-                doc_search = FAISS.from_texts(chunk_lst, embeddings)
-                chain = get_qa_chain()
-                query = question
-                docs = doc_search.similarity_search(query)
+            chunk_lst = get_chunk_lst(pdf_text)
+            embeddings = get_embeddings()
+            doc_search = FAISS.from_texts(chunk_lst, embeddings)
+            chain = get_qa_chain()
+            query = question
+            docs = doc_search.similarity_search(query)
                 #op = chain.run(input_documents=docs, question=query)
             try:
                 op = chain.run(input_documents=docs, question=query)
