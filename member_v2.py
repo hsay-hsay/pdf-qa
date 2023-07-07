@@ -157,7 +157,7 @@ def member_page():
             docs = doc_search.similarity_search(query)
             try:
                 op = chain.run(input_documents=docs, question=query)
-                if (op.answers=="I don't know."):
+                if (op=="I don't know."):
                     st.write("Apologies! The information you have requested is not available at this point")
                 else:
                     st.write(op)
