@@ -166,7 +166,7 @@ def member_page():
                 #op = chain.run(input_documents=docs, question=query)
             try:
                 op = chain.run(input_documents=docs, question=query)
-                if (op==" I don't know."):
+                if (op==" I don't know." or op==" I'm sorry, I don't understand the question."):
                     st.write("Apologies! The information you have requested is not available at this point")
                 else:
                     st.write(op)
