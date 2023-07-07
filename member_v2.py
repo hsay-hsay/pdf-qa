@@ -120,6 +120,7 @@ def member_page():
     
     # st.write("Click the 'Start' button and speak into your microphone.")
     if audio_bytes:
+        text=""
         # question = text
         # audio_bytes = audio_recorder(text = "Click to record", icon_size="2x", key="audio_button")
         filename = str(random.randint(1,199))+".wav"
@@ -131,7 +132,10 @@ def member_page():
             harvard = sr.AudioFile(filename)
             with harvard as source:
                 audio = r.record(source)
-            text = r.recognize_google(audio)
+            try:
+                text = r.recognize_google(audio)
+            except Exception as e:
+                st.write("Try Again")
         
         os.remove(filename)
         # question_speech = speechTotext()  #edited by sudip
