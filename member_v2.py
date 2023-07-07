@@ -85,7 +85,7 @@ def get_chunk_lst(pdf_text):
 
 def member_page():
     #st.title("GenAI-Assisted Medical Records Extraction")
-    st.markdown("<h1 style='text-align: center; color: black;'>Generative-AI Assisted Medical Records Digitization</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: black;'>Generative-AI Assisted Medical Records Extraction</h1>", unsafe_allow_html=True)
     # file selection dropdown menu
     # st.write("check out this [link](https://share.streamlit.io/mesmith027/streamlit_webapps/main/MC_pi/streamlit_app.py)")
     # selected_file = st.selectbox("Select a PDF [[All Reports](https://drive.google.com/drive/folders/1BocjhYw5_XB6113__FNtL4eTt1mSpE3z)]",
