@@ -155,8 +155,11 @@ def member_page():
             chain = get_qa_chain()
             query = question
             docs = doc_search.similarity_search(query)
-            op = chain.run(input_documents=docs, question=query)
-            st.write(op)
+            try:
+                op = chain.run(input_documents=docs, question=query)
+                st.write(op)
+            except:
+                st.write("Apologies! The information you have requested in not available at this point")
         else:
             st.warning("Please select a PDF.")
         audio_bytes = False
