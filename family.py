@@ -39,7 +39,7 @@ def son():
             
 
 
-            image = Image.open("data\SUDIP PIC.jpg")
+            image = Image.open("data\boy.jpg")
 
 # Create a circular mask
             mask = Image.new("L", image.size, 0)
@@ -113,7 +113,7 @@ def daughter():
             
 
 
-            image = Image.open("data\SUDIP PIC.jpg")
+            image = Image.open("data\boy.jpg")
 
 # Create a circular mask
             mask = Image.new("L", image.size, 0)
@@ -187,7 +187,7 @@ def daughter_in_law():
             
 
 
-            image = Image.open("data\SUDIP PIC.jpg")
+            image = Image.open("data\boy.jpg")
 
 # Create a circular mask
             mask = Image.new("L", image.size, 0)
@@ -261,7 +261,7 @@ def grandson():
             
 
 
-            image = Image.open("data\SUDIP PIC.jpg")
+            image = Image.open("data\boy.jpg")
 
 # Create a circular mask
             mask = Image.new("L", image.size, 0)
