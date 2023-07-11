@@ -8,6 +8,8 @@ from admin import admin_page
 from doctor import doctor_page
 from member_v2 import member_page
 from PIL import Image
+from family import *
+
 
 # get user information
 user_info = {}
@@ -75,8 +77,8 @@ if authentication_status:
     with st.sidebar:
         selected_page = option_menu(
             menu_title=None,
-            options = ["Admin", "Doctor", "Member", "Logout"],
-            icons = ["gear", "clipboard-pulse", "person", "box-arrow-left"]
+            options = ["Admin", "Doctor","Family", "Member", "Logout"],
+            icons = ["gear", "clipboard-pulse", "person", "person" ,"box-arrow-left"]
         )
     
     if selected_page == "Admin":
@@ -85,6 +87,29 @@ if authentication_status:
         doctor_page()
     if selected_page == "Member":
         member_page()
+    if selected_page =="Family":
+        with st.sidebar:
+
+            selected_page = option_menu(
+
+            menu_title=None,
+
+            options = ["Son", "Daughter","Daughter-in-law","Grandson" ],
+
+            icons = ["person-circle","person","person","person-circle"]
+
+    )
+
+        if selected_page == "Son":
+            son()
+        if selected_page=="Daughter":
+            daughter()
+
+        if selected_page=="Daughter-in-law":
+            daughter_in_law()
+        if selected_page =="Grandson":
+            grandson()
+            
     if selected_page == "Logout":
         logout()
     #=======================================
